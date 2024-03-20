@@ -1,0 +1,6 @@
+@ParfoisDev_HostAddress = http://localhost:5001
+
+GET {{ParfoisDev_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
