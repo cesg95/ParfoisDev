@@ -6,16 +6,12 @@
 
     public class ApiContext : DbContext
     {
-        public ApiContext(DbContextOptions<ApiContext> options)
-            : base(options)
-        {
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase(databaseName: "ParfoisDev");
         }
 
         public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<Item> Items { get; set; }
     }
 }

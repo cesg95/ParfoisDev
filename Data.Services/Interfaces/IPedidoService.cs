@@ -13,5 +13,9 @@
         Task<Pedido> GetByIdAsync(int pedidoId);
 
         Task<Pedido> CreateAsync(PedidoRequest request);
+
+        Task UpdateAsync(Pedido pedido);
+
+        Task DeleteAsync(Pedido pedido);
     }
 }

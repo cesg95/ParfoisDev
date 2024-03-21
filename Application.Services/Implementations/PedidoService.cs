@@ -8,6 +8,11 @@
     using Application.Services.Interfaces;
     using Application.Services.Mappers;
     using Application.Services.Mappers.Requests;
+    using Application.Services.Validators;
+
+    using Infrastructure.CrossCutting.ErrorMessages;
+    using Infrastructure.CrossCutting.Exceptions;
+    using Infrastructure.CrossCutting.Helpers;
 
     public class PedidoService : IPedidoService
     {
@@ -25,15 +30,27 @@
             return pedidos.ToDto();
         }
 
-        public async Task<Pedido> GetByIdAsync(int pedidoId)
+        public async Task<Pedido> GetByIdAsync(string pedidoId)
         {
-            var pedido = await this.pedidoService.GetByIdAsync(pedidoId);
+            if (!int.TryParse(pedidoId, out int id))
+            {
+                throw new BadRequestException(BadRequestMessages.InvalidIdentifier.ToMessage());
+            }
+
+            var pedido = await this.pedidoService.GetByIdAsync(id);
+
+            if (pedido == null)
+            {
+                throw new NotFoundException(NotFoundMessages.PedidoNotFound.ToMessage());
+            }
 
             return pedido.ToDto();
         }
 
         public async Task<Pedido> CreateAsync(PedidoRequest request)
         {
+            request.Validate();
+
             var requestMapped = request.ToModel();
 
             var pedido = await this.pedidoService.CreateAsync(requestMapped);
@@ -41,14 +58,38 @@
             return pedido.ToDto();
         }
 
-        public Task UpdateAsync(int pedidoId, Pedido pedido)
+        public async Task UpdateAsync(string pedidoId, Pedido pedido)
         {
-            throw new NotImplementedException();
+            pedido.Validate(pedidoId);
+            var id = int.Parse(pedidoId);
+
+            var pedidoSaved = await this.pedidoService.GetByIdAsync(id);
+
+            if (pedidoSaved == null)
+            {
+                throw new NotFoundException(NotFoundMessages.PedidoNotFound.ToMessage());
+            }
+
+            var pedidoMapped = pedido.ToModel();
+
+            await this.pedidoService.UpdateAsync(pedidoMapped);
         }
 
-        public Task DeleteAsync(int pedidoId)
+        public async Task DeleteAsync(string pedidoId)
         {
-            throw new NotImplementedException();
+            if (!int.TryParse(pedidoId, out int id))
+            {
+                throw new BadRequestException(BadRequestMessages.InvalidIdentifier.ToMessage());
+            }
+
+            var pedidoSaved = await this.pedidoService.GetByIdAsync(id);
+
+            if (pedidoSaved == null)
+            {
+                throw new NotFoundException(NotFoundMessages.PedidoNotFound.ToMessage());
+            }
+
+            await this.pedidoService.DeleteAsync(pedidoSaved);
         }
     }
 }

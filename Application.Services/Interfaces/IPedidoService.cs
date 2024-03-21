@@ -10,12 +10,12 @@
     {
         Task<IEnumerable<Pedido>> GetAllAsync();
 
-        Task<Pedido> GetByIdAsync(int pedidoId);
+        Task<Pedido> GetByIdAsync(string pedidoId);
 
         Task<Pedido> CreateAsync(PedidoRequest request);
 
-        Task UpdateAsync(int pedidoId, Pedido pedido);
+        Task UpdateAsync(string pedidoId, Pedido pedido);
 
-        Task DeleteAsync(int pedidoId);
+        Task DeleteAsync(string pedidoId);
     }
 }

@@ -4,6 +4,10 @@ namespace ParfoisDev.Controllers
     using Application.Dto.Requests;
     using Application.Services.Interfaces;
 
+    using Infrastructure.CrossCutting.ErrorMessages;
+    using Infrastructure.CrossCutting.Exceptions;
+    using Infrastructure.CrossCutting.Helpers;
+
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
@@ -24,44 +28,80 @@ namespace ParfoisDev.Controllers
         }
 
         [HttpGet("{id}", Name = "GetById")]
-        public async Task<ActionResult<Pedido>> GetByIdAsync(int id)
+        public async Task<ActionResult<Pedido>> GetByIdAsync(string id)
         {
-            var pedido = await this.pedidoService.GetByIdAsync(id);
-
-            if (pedido == null)
+            try
             {
-                return this.NotFound();
-            }
+                var pedido = await this.pedidoService.GetByIdAsync(id);
 
-            return pedido;
+                if (pedido == null)
+                {
+                    return this.NotFound(NotFoundMessages.PedidoNotFound.ToMessage());
+                }
+
+                return pedido;
+            }
+            catch (NotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<Pedido>> PostAsync(PedidoRequest request)
         {
-            var pedido = await this.pedidoService.CreateAsync(request);
+            try
+            {
+                var pedido = await this.pedidoService.CreateAsync(request);
 
-            return this.CreatedAtRoute("GetById", new { id = pedido.Id }, pedido);
+                return this.CreatedAtRoute("GetById", new { id = pedido.Id }, pedido);
+            }
+            catch (BadRequestException ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, Pedido pedido)
+        public async Task<IActionResult> PutAsync(string id, Pedido pedido)
         {
-            await this.pedidoService.UpdateAsync(id, pedido);
+            try
+            {
+                await this.pedidoService.UpdateAsync(id, pedido);
 
-            // TODO not found e bad request
-
-            return this.NoContent();
+                return this.NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
-            await this.pedidoService.DeleteAsync(id);
+            try
+            {
+                await this.pedidoService.DeleteAsync(id);
 
-            // TODO not found
-
-            return this.NoContent();
+                return this.NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
     }
 }

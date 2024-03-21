@@ -33,5 +33,15 @@
         {
             return await this.pedidoRepository.CreateAsync(request);
         }
+
+        public async Task UpdateAsync(Pedido pedido)
+        {
+            await this.pedidoRepository.UpdateAsync(pedido);
+        }
+
+        public async Task DeleteAsync(Pedido pedido)
+        {
+            await this.pedidoRepository.DeleteAsync(pedido);
+        }
     }
 }

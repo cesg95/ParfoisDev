@@ -1,8 +1,7 @@
 using Data.Repository;
 using Data.Repository.Implementations;
 using Data.Repository.Interfaces;
-
-using Microsoft.EntityFrameworkCore;
+using Data.Services.Rules;
 
 using ApplicationImplementations = Application.Services.Implementations;
 using ApplicationInterfaces = Application.Services.Interfaces;
@@ -24,10 +23,19 @@ builder.Services.AddDbContext<ApiContext>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 
 // Data.Services
+builder.Services.AddScoped<IRuleFactory, RuleFactory>();
+builder.Services.AddScoped<IRule, AprovadoRule>();
+builder.Services.AddScoped<IRule, ItemsAprovadosAMaiorRule>();
+builder.Services.AddScoped<IRule, ItemsAprovadosAMenorRule>();
+builder.Services.AddScoped<IRule, ValorAprovadoAMaiorRule>();
+builder.Services.AddScoped<IRule, ValorAprovadoAMenorRule>();
+builder.Services.AddScoped<IRule, ReprovadoRule>();
 builder.Services.AddScoped<DataInterfaces.IPedidoService, DataImplementations.PedidoService>();
+builder.Services.AddScoped<DataInterfaces.IStatusService, DataImplementations.StatusService>();
 
 // Application.Services
 builder.Services.AddScoped<ApplicationInterfaces.IPedidoService, ApplicationImplementations.PedidoService>();
+builder.Services.AddScoped<ApplicationInterfaces.IStatusService, ApplicationImplementations.StatusService>();
 
 var app = builder.Build();
 
