@@ -46,7 +46,7 @@
 
         public async Task UpdateAsync(Pedido pedido)
         {
-            var items = this.context.Items.Where(x => x.PedidoId == pedido.Id);
+            var items = this.context.Items.Where(x => x.PedidoId == pedido.Id).AsNoTracking();
             this.context.Items.RemoveRange(items);
 
             this.context.Pedidos.Update(pedido);

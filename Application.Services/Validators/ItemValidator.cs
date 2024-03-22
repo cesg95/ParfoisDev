@@ -10,6 +10,11 @@
     {
         public static void Validate(this Item item)
         {
+            if (item == null)
+            {
+                throw new BadRequestException(BadRequestMessages.InvalidItem.ToMessage());
+            }
+
             if (string.IsNullOrWhiteSpace(item.Descricao))
             {
                 throw new BadRequestException(BadRequestMessages.ItemMustHaveDescription.ToMessage());

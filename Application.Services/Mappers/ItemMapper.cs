@@ -12,7 +12,17 @@
             return items.Select(ToDto);
         }
 
-        public static Dto.Item ToDto(this Domain.Model.Item item)
+        public static IEnumerable<Domain.Model.Item> ToModel(this IEnumerable<Dto.Item> items)
+        {
+            if (items == null)
+            {
+                return new List<Domain.Model.Item>();
+            }
+
+            return items.Select(ToModel);
+        }
+
+        private static Dto.Item ToDto(this Domain.Model.Item item)
         {
             if (item == null)
             {
@@ -27,17 +37,7 @@
             };
         }
 
-        public static IEnumerable<Domain.Model.Item> ToModel(this IEnumerable<Dto.Item> items)
-        {
-            if (items == null)
-            {
-                return new List<Domain.Model.Item>();
-            }
-
-            return items.Select(ToModel);
-        }
-
-        public static Domain.Model.Item ToModel(this Dto.Item item)
+        private static Domain.Model.Item ToModel(this Dto.Item item)
         {
             if (item == null)
             {

@@ -25,7 +25,7 @@
             this.ruleFactory = ruleFactory;
         }
 
-        public async Task<PedidoWorkflow> CreateAsync(StatusRequest request)
+        public async Task<PedidoWorkflow> GetPedidoWorkflowAsync(StatusRequest request)
         {
             var pedido = await this.pedidoService.GetByIdAsync(int.Parse(request.Pedido));
 

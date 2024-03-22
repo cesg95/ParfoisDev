@@ -7,6 +7,6 @@
 
     public interface IStatusService
     {
-        Task<PedidoWorkflow> CreateAsync(StatusRequest request);
+        Task<PedidoWorkflow> GetPedidoWorkflowAsync(StatusRequest request);
     }
 }

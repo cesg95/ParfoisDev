@@ -24,7 +24,7 @@ namespace ParfoisDev.Controllers
         {
             try
             {
-                var workflow = await this.statusService.CreateAsync(request);
+                var workflow = await this.statusService.GetPedidoWorkflowAsync(request);
 
                 return this.Ok(workflow);
             }

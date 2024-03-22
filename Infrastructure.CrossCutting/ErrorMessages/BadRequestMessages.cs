@@ -36,5 +36,8 @@
 
         [Description("ValorAprovado cannot be negative.")]
         ValorAprovadoCannotBeNegative = 10,
+
+        [Description("Invalid item.")]
+        InvalidItem = 11,
     }
 }

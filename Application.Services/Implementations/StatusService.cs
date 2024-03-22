@@ -22,7 +22,7 @@
             this.statusService = statusService;
         }
 
-        public async Task<PedidoWorkflow> CreateAsync(StatusRequest request)
+        public async Task<PedidoWorkflow> GetPedidoWorkflowAsync(StatusRequest request)
         {
             request.Validate();
 
@@ -40,7 +40,7 @@
 
             var requestMapped = request.ToModel();
 
-            var workflow = await this.statusService.CreateAsync(requestMapped);
+            var workflow = await this.statusService.GetPedidoWorkflowAsync(requestMapped);
 
             return workflow.ToDto();
         }
